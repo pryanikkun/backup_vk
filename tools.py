@@ -2,7 +2,6 @@ import json
 import requests
 
 from classes import VKAPIClient, ProfilePhoto, YandexClient
-from conf import VK_TOKEN
 
 
 def _get_all_likes(photos):
@@ -55,7 +54,7 @@ def photo_to_ya(ya, photos):
         ya.upload_photo(folder_name, photo)
 
 
-def from_vk_to_ya(vk_user_id, ya_token, count_photos):
+def from_vk_to_ya(vk_user_id, ya_token, count_photos, VK_TOKEN):
     """ Функция, управляющая переходами по функциям """
     # Получаем фото из VK API
     vk = VKAPIClient(VK_TOKEN, vk_user_id)
@@ -70,5 +69,3 @@ def from_vk_to_ya(vk_user_id, ya_token, count_photos):
 
     # Запишем информацию в файл
     photo_to_json(photos_objects)
-
-    print('Готово!')
