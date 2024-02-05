@@ -14,6 +14,7 @@ class VKAPIClient:
         }
 
     def photo_get(self, count_photos):
+        """ Получает данные о фотографиях """
         params = {
             'owner_id': self.id,
             'album_id': 'profile',
@@ -37,6 +38,7 @@ class ProfilePhoto:
         self.url = url_photo
 
     def make_photo_names(self, likes):
+        """ Заполняет имя фото """
         if likes.count(self.likes) == 1:
             self.file_name = f'{self.likes}.jpg'
         else:
@@ -63,6 +65,7 @@ class YandexClient:
                                 params=params)
 
     def upload_photo(self, folder_name, photo):
+        """ Функция загружает фото в папку на Я.Диске """
         url_upload_photo = f'{self.YA_BASE_URL}/v1/disk/resources/upload'
         params = {
             'path': f'{folder_name}/{photo.file_name}',
