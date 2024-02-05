@@ -1,6 +1,8 @@
+import logging
 from tools import from_vk_to_ya
 
 if __name__ == '__main__':
+    logging.basicConfig(filename="basic.log", level=logging.DEBUG)
     user_id = input('Введите id пользователя: ')
     ya_token = input('Введите токен с Полигона Яндекс.Диска: ')
     count_photos = input('Введите число фото, которые вы хотите сохранить '
