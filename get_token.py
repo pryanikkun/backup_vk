@@ -6,7 +6,7 @@ params = {
     'client_id': APP_ID,
     'redirect_uri': 'https://example.com/callback',
     'display': 'page',
-    'scope': 'friends, photos',
+    'scope': 'photos',
     'response_type': 'token',
     'state': 123456,
 }
