@@ -7,7 +7,7 @@ if __name__ == '__main__':
     ya_token = input('Введите токен с Полигона Яндекс.Диска: ')
     count_photos = input('Введите число фото, которые вы хотите сохранить '
                          '(опционально): ')
-    VK_TOKEN = 'vk1.a.6q7wWLWedRp9AOkmnbwaWJK2HUfrdq7TXHw4wa0fg7pwEzeDfeR4g_7FXTXntrJC5VgjfV_H0TsBlHP93l4c_oA1rknVJWVt1eCiCStBqonFYEGW_EIuXoiU51UxIdu5VpO69jc-1a70vGVurffApSA5jGwS750rLZZgp3DMV1Gi7lSTAJIkKgdBt-ED-nml'
+    VK_TOKEN = ''  # место для токена, полученного с помощью get_token.py
 
     try:
         count_photos = int(count_photos)
