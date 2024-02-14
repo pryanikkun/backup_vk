@@ -5,6 +5,7 @@ from classes import VKAPIClient, YandexClient
 
 
 def make_photos(photos_data):
+    """ Получение словаря для работы """
     photos = {}
     for photo in photos_data:
         file_name = f"{photo['likes']['count']}.jpg"
