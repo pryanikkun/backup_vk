@@ -1,45 +1,35 @@
 import json
 import requests
 
-from classes import VKAPIClient, ProfilePhoto, YandexClient
+from classes import VKAPIClient, YandexClient
 
 
-def _get_all_likes(photos):
-    """ Создает список лайков всех фото """
-    likes = []
-    for photo in photos:
-        likes.append(photo.likes)
-    return likes
-
-
-def make_photos_objects(photos_data):
-    """ Получение нужных полей для работы """
-    photos_objects = []
+def make_photos(photos_data):
+    photos = {}
     for photo in photos_data:
-        like_photo = photo['likes']['count']
-        date_photo = photo['date']
-        for size in photo['sizes']:
-            if size['type'] == 'w':
-                size_photo = size['type']
-                url_photo = size['url']
-            elif size['type'] == 'z':
-                size_photo = size['type']
-                url_photo = size['url']
-        photos_objects.append(ProfilePhoto(like_photo, date_photo,
-                                           size_photo, url_photo))
-    likes = _get_all_likes(photos_objects)
-    for i in photos_objects:
-        i.make_photo_names(likes)
-    return photos_objects
+        file_name = f"{photo['likes']['count']}.jpg"
+        if file_name in photos.keys():
+            file_name = f"{photo['likes']['count']}_{photo['date']}.jpg"
+
+        max_photo = sorted(photo['sizes'],
+                           key=lambda size: size['height'] * size['width'],
+                           reverse=True)[0]
+        size_photo = max_photo['type']
+        url_photo = max_photo['url']
+        photos[file_name] = {
+            "size": size_photo,
+            "url": url_photo
+        }
+    return photos
 
 
 def photo_to_json(photos):
     """ Создает файл с информацией о загруженных фото """
     list_for_json = []
-    for photo in photos:
+    for file_name, photo in photos.items():
         list_for_json.append({
-            'file_name': photo.file_name,
-            'size': photo.size,
+            'file_name': file_name,
+            'size': photo['size'],
         })
 
     with open('profile_photos.json', 'w') as file:
@@ -50,8 +40,8 @@ def photo_to_ya(ya, photos):
     """ Загружает фото на Я.Диск """
     folder_name = 'VKAvatars'
     ya.create_folder(folder_name)
-    for photo in photos:
-        ya.upload_photo(folder_name, photo)
+    for file_name, photo in photos.items():
+        ya.upload_photo(folder_name, file_name, photo['url'])
 
 
 def from_vk_to_ya(vk_user_id, ya_token, count_photos, VK_TOKEN):
@@ -61,11 +51,11 @@ def from_vk_to_ya(vk_user_id, ya_token, count_photos, VK_TOKEN):
     photos_data = vk.photo_get(count_photos)
 
     # Подготовим данные для удобной работы
-    photos_objects = make_photos_objects(photos_data['response']['items'])
+    photos = make_photos(photos_data['response']['items'])
 
     # Отправим на Я.Диск
     ya = YandexClient(ya_token)
-    photo_to_ya(ya, photos_objects)
+    photo_to_ya(ya, photos)
 
     # Запишем информацию в файл
-    photo_to_json(photos_objects)
+    photo_to_json(photos)

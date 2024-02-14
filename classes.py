@@ -29,22 +29,6 @@ class VKAPIClient:
         return response.json()
 
 
-class ProfilePhoto:
-    def __init__(self, like_photo, date_photo, size_photo, url_photo):
-        self.file_name = None
-        self.likes = like_photo
-        self.date_created = date_photo
-        self.size = size_photo
-        self.url = url_photo
-
-    def make_photo_names(self, likes):
-        """ Заполняет имя фото """
-        if likes.count(self.likes) == 1:
-            self.file_name = f'{self.likes}.jpg'
-        else:
-            self.file_name = f'{self.likes}_{self.date_created}.jpg'
-
-
 class YandexClient:
     YA_BASE_URL = 'https://cloud-api.yandex.net'
 
@@ -64,12 +48,12 @@ class YandexClient:
                                 headers=self.headers,
                                 params=params)
 
-    def upload_photo(self, folder_name, photo):
+    def upload_photo(self, folder_name, file_name, photo_url):
         """ Функция загружает фото в папку на Я.Диске """
         url_upload_photo = f'{self.YA_BASE_URL}/v1/disk/resources/upload'
         params = {
-            'path': f'{folder_name}/{photo.file_name}',
-            'url': photo.url,
+            'path': f'{folder_name}/{file_name}',
+            'url': photo_url,
         }
         response = requests.post(url_upload_photo,
                                  headers=self.headers,
